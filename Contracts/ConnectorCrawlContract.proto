@@ -237,7 +237,7 @@ message Content {
 		Tif = 8;
 
 		// For future-proofing, following MSGraph evolvable enums
-        // All new enums should be added below this one until major API version change.
+        	// All new enums should be added below this one until major API version change.
 		UnknownFutureValue = 9;
 	}
 

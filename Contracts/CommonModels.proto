@@ -97,7 +97,7 @@ message OperationStatus {
 	string statusMessage = 2;
 
 	// Retry info to be used by framework to retry the same operation for a failed operation
-    // Will be ignored incase of success and partial success operations.
+    	// Will be ignored incase of success and partial success operations.
 	RetryDetails retryInfo = 3;
 }
 
@@ -259,7 +259,7 @@ message SourcePropertyDefinition {
 	uint32 defaultSearchAnnotations = 3;
 
 	// Required search annotaions
-    // Certain property like id always set isQueryable true and isRetrieable true.
+    	// Certain property like id always set isQueryable true and isRetrieable true.
 	uint32 requiredSearchAnnotations = 4;
 
 	// Default semantic labels for the source property

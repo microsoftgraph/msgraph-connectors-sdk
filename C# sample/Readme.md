@@ -1,10 +1,11 @@
 This is a sample project that provides an example for creating a custom connector that can run on Microsoft Graph connectors platform (GCP). The project builds on the contracts provided by Microsoft to interact with its GCP. More can be read on the Custom Graph connectors and its usage here: `<ToDo>`
 
 The project includes
-    1. A Connector server that listens to queries from GCP
-    2. Contracts defined by platform for interoperability
-    3. Stub implementation for all the APIs defined in the contract
-    4. Sample code to demonstrate Model conversions between datasource models and contract defined models
+
+   1. A Connector server that listens to queries from GCP
+   2. Contracts defined by platform for interoperability
+   3. Stub implementation for all the APIs defined in the contract
+   4. Sample code to demonstrate Model conversions between datasource models and contract defined models
 
 Project is built as a .net core based console application. Once configured correctly GCP will be able make calls into this application through GRPC protocol. The primary responsibility of the connector code is to help GCP during connection creation and later during crawling to fetch information from the datasource. **Ensure the process is always running.** Refer here `<ToDo>` for configuring GCP to work with connector.
 

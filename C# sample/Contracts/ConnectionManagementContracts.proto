@@ -1,0 +1,68 @@
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+syntax = "proto3";
+
+import "Contracts/CommonModels.proto";
+
+package Microsoft.Graph.Connectors.Contracts.Grpc;
+
+// Service for connection management from UI
+service ConnectionManagementService {
+    // Validate if the provided datasource can be successfully accessed using provided credential data
+	rpc ValidateAuthentication (ValidateAuthenticationRequest) returns (ValidateAuthenticationResponse);
+
+	// Validate if the custom configuration info provided by Search Admin can be used to crawl data source.
+    // Ensure all items can be accessed and crawled efficiently with provided info
+	rpc ValidateCustomConfiguration (ValidateCustomConfigurationRequest) returns (ValidateCustomConfigurationResponse);
+
+	// Return schema of items in datasource. Schema is comprised of list of properties.
+    // Each property maps to an attribute of a data source entity. Data source entity can have one or more properties.
+    // Schema represent superset of all the properties any entity in data source can have.
+	rpc GetDataSourceSchema (GetDataSourceSchemaRequest) returns (GetDataSourceSchemaResponse);
+}
+
+// Request model to validate authentication to datasource
+message ValidateAuthenticationRequest {
+	// Holds credential provided by admin to access data source
+	AuthenticationData authenticationData = 1;
+}
+
+// Response model of validate authentication request to datasource
+message ValidateAuthenticationResponse {
+	// Status of operation and error details in case of error
+	OperationStatus status = 1;
+}
+
+// Request model to validate custom configuration information
+message ValidateCustomConfigurationRequest {
+    // Configuration data
+	CustomConfiguration customConfiguration = 1;
+
+	// Holds datasource access URL and credential to access it
+	AuthenticationData authenticationData = 2;
+}
+
+// Response model of validation of custom configuration information
+message ValidateCustomConfigurationResponse {
+	// Status of operation and error details in case of error
+	OperationStatus status = 1;
+}
+
+// Request model to get schema information of datasource
+message GetDataSourceSchemaRequest {
+	// Configuration data
+	CustomConfiguration customConfiguration = 1;
+
+	// Holds datasource access URL and credential to access it
+	AuthenticationData authenticationData = 2;
+}
+
+// Response model of data source schema request
+message GetDataSourceSchemaResponse {
+	// Status of operation and error details in case of error
+	OperationStatus status = 1;
+
+	// Datasource schema
+	DataSourceSchema dataSourceSchema = 2;
+}

@@ -2,10 +2,11 @@ MICROSOFT SOFTWARE LICENSE TERMS
 
 MICROSOFT GRAPH CONNECTORS SDK
 
+***
 **IF YOU LIVE IN (OR ARE A BUSINESS WITH A PRINCIPAL PLACE OF BUSINESS
 IN) THE UNITED STATES, PLEASE READ THE "BINDING ARBITRATION AND CLASS
 ACTION WAIVER" SECTION BELOW. IT AFFECTS HOW DISPUTES ARE RESOLVED.**
-
+***
 These license terms are an agreement between you and Microsoft
 Corporation (or one of its affiliates). They apply to the software named
 above and any Microsoft services or software updates (except to the

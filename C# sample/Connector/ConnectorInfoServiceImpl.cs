@@ -19,6 +19,7 @@ namespace CustomConnectorTemplate.Connector
         /// <summary>
         /// Primary identifies for the connector. Same ID to be used in Manifest for connector onboarding in Graph connectors platform and Microsoft Admin Center.
         /// Cannot be changed after connections are created. Changing it later would fail the connections created with older ID
+        /// Make sure ID is valid GUID
         /// </summary>
         public const string ConnectorUniqueId = "guid1";
 

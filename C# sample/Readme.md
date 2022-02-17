@@ -19,8 +19,8 @@ Execution flow:
 
 Where to write code:
 
-    1. Search for `"[Code Here]"` in the entire project. We have marked areas that need coding or inspection.
-    2. Replace `'DatabaseReader'` and `'Employee'` with your datasource reader and models
+    1. Search for "[Code Here]" in the entire project. We have marked areas that need coding or inspection.
+    2. Replace 'DatabaseReader' and 'Employee' with your datasource reader and models
     3. Take care of all error cases that may arise while talking to datasource or validating inputs. Return proper error message and type in OperationStatus for all the APIs.
 
 How to test code:

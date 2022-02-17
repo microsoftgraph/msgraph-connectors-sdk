@@ -1,9 +1,3 @@
-﻿// ---------------------------------------------------------------------------
-// <copyright file="Readme.md" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-// ---------------------------------------------------------------------------
-
 This is a sample project that provides an example for creating a custom connector that can run on Microsoft Graph connectors platform (GCP). The project builds on the contracts provided by Microsoft to interact with its GCP. More can be read on the Custom Graph connectors and its usage here: <ToDo>
 
 The project includes

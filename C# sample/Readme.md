@@ -25,7 +25,7 @@ Where to write code:
    3. Take care of all error cases that may arise while talking to datasource or validating inputs. Return proper error message and type in OperationStatus for all the APIs.
 
 How to test code:
-1. Install GCP [On-Premises Agent | Microsoft Docs](https://docs.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "On-Premises Agent | Microsoft Docs") and follow the instructions to register the agent.
+1. Install GCP and follow the instructions to register the agent [On-Premises Agent | Microsoft Docs](https://docs.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "On-Premises Agent | Microsoft Docs").
 2. Assign a valid GUID as ID in ConnectorInfoServiceImpl.cs, build and run the console application.
 3. Edit the CustomConnectorPortMap JSON file in the GCP installation folder (Program files > Graph connector agent) with connector id (same as provider id present in ConnectorInfoServiceImpl.cs) and TCP port information (Port used by connector can be found in: ConnectorServer.cs). This will be read by GCP while instantiating the connector instance. *You may need to open notepad/VS in admin mode to edit the JSON.*
 4. Fill relevant details in the TestApp config files (AgentConfig.json and ConnectionInfo.json) inside the config folder(Program files> Graph connector agent > TestApp> Config)

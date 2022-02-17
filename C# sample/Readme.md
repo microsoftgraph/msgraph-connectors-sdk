@@ -13,9 +13,10 @@ Execution flow:
 
    1. First step is connection creation flow. This happens on Microsoft Admin portal where Search admin goes through a series of steps to configure a connection. Many of these steps end up making calls into the connector code in the following order.
  
-   a. ConnectionManagementServiceImpl.ValidateAuthentication
-   b. ConnectionManagementServiceImpl.ValidateCustomConfiguration
-   c. ConnectionManagementServiceImpl.GetDataSourceSchema
+    a. ConnectionManagementServiceImpl.ValidateAuthentication
+    b. ConnectionManagementServiceImpl.ValidateCustomConfiguration
+    c. ConnectionManagementServiceImpl.GetDataSourceSchema
+
    2. Once the connection is created successfully, GCP will start calling crawler API to crawl the datasource and return the items. ConnectorCrawlerServiceImpl.GetCrawlStream would be called to read data from data source. A sample implementation for a simple database access is provided for reference.
 
 Where to write code:

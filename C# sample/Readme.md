@@ -1,6 +1,6 @@
 This is a sample project that provides an example for creating a custom connector that can run on Microsoft Graph connectors platform (GCP). The project builds on the contracts provided by Microsoft to interact with its GCP. More can be read on the Custom Graph connectors and its usage here: `<ToDo>`
 
-The project includes
+The project includes:
 
    1. A Connector server that listens to queries from GCP
    2. Contracts defined by platform for interoperability

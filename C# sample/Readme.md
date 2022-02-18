@@ -37,6 +37,6 @@ Project is built as a .net core based console application. Once configured corre
 	- Sample AgentConfig.json
 		- Replace the values of tenantId, clientId and secret with the tenant you are using.
 		- Do not change the mockIngestion flag.
-5. Test out connector code flows using TestApp present in the GCA installation folder (Program files> Graph connector agent > TestApp> GraphConnectorAgentTest)
+5. Test out connector code flows using TestApp present in the GCA installation folder (Program files> Graph connector agent > TestApp> GraphConnectorAgentTest.exe)
 	- TestApp is only for local testing.
 	- Only one test case can be run at a time. You will have to exit and relaunch the app for testing another scenario.

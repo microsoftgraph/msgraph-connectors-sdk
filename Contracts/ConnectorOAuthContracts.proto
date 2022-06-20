@@ -1,0 +1,30 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+syntax = "proto3";
+
+import "Contracts/CommonModels.proto";
+
+package Microsoft.Graph.Connectors.Contracts.Grpc;
+
+/// Defines APIs for OAuth flows
+service ConnectorOAuthService {
+
+  /// Refreshes the access token by generating a new token
+  rpc RefreshAccessToken (RefreshAccessTokenRequest) returns (RefreshAccessTokenResponse);
+}
+
+// Represents the request model containing existing credential data to refresh the access token
+message RefreshAccessTokenRequest{
+	// Authentication data containing the details of the generated access token, refresh token details
+	AuthenticationData authenticationData = 1;
+}
+
+// Represents the response model for refresh access token request
+message RefreshAccessTokenResponse{
+	// Status of operation and error details in case of error
+	OperationStatus status = 1;
+
+	// Refreshed credential data
+	OAuth2ClientCredentialsResponse refreshedCredentialData = 2;
+}

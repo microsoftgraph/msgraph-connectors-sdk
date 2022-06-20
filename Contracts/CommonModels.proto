@@ -26,8 +26,8 @@ message AuthenticationData {
         /// Windows AD based authentication that supports username, password and domain info
         Windows = 2;
 
-	// OAuth2 based authentication with client credentials - app id and app secret
-	OAuth2ClientCredentials = 3;
+		// OAuth2 based authentication with client credentials - app id and app secret
+		OAuth2ClientCredentials = 3;
     }
 
 	// Type of authentication information held in the instance
@@ -44,8 +44,8 @@ message AuthenticationData {
 		// Set if windows credentials are used to access datasource
         WindowsCredential windowsCredential = 11;
 
-	// Set if access to data source is using OAuth2 client credentials
-	OAuth2ClientCredentials oAuth2ClientCredentials = 12;
+		// Set if access to data source is using OAuth2 client credentials
+		OAuth2ClientCredentials oAuth2ClientCredentials = 12;
     }
 }
 
@@ -141,7 +141,7 @@ message OperationStatus {
 	string statusMessage = 2;
 
 	// Retry info to be used by framework to retry the same operation for a failed operation
-    	// Will be ignored in case of success and partial success operations.
+    // Will be ignored in case of success and partial success operations.
 	RetryDetails retryInfo = 3;
 }
 
@@ -173,7 +173,7 @@ message RetryDetails {
 // Represents schema of properties that represent a data entity in data source
 message DataSourceSchema {
 	// Represents list of properties that define a data entity in data source
-	repeated SourcePropertyDefinition PropertyList = 1;
+    repeated SourcePropertyDefinition PropertyList = 1;
 }
 
 // Defines a single source property

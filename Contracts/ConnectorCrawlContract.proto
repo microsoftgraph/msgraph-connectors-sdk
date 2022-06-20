@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-﻿syntax = "proto3";
+syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 import "Contracts/CommonModels.proto";
@@ -11,8 +11,11 @@ package Microsoft.Graph.Connectors.Contracts.Grpc;
 /// Defines APIs to read data from datasource
 service ConnectorCrawlerService {
 
-  /// Returns a new data item stream by crawling the data source.
+  /// Returns a new data item stream by crawling the data source for full and periodic full crawl.
   rpc GetCrawlStream (GetCrawlStreamRequest) returns (stream CrawlStreamBit);
+
+  /// Returns a new data item stream by crawling the data source for incremental crawl.
+  rpc GetIncrementalCrawlStream (GetIncrementalCrawlStreamRequest) returns (stream IncrementalCrawlStreamBit);
 }
 
 // Request object to hold all the parameters needed for crawling the datasource
@@ -78,6 +81,78 @@ message CrawlItem {
 	}
 }
 
+// Request object to hold all the parameters needed for crawling the datasource for incremental crawl
+message GetIncrementalCrawlStreamRequest {
+
+	// Connection specific custom configuration info provided by Search Admin
+	CustomConfiguration customConfiguration = 1;
+
+	// Basic access information of data source like url, access credentials etc.
+	AuthenticationData authenticationData = 2;
+
+	// Crawl progress checkpoint that was marked by previous items batch. Used to resume crawls in case of crashes or other failures.
+	CrawlCheckpoint crawlProgressMarker = 3;
+
+	// Schema of connection. This is used to identify the property which is content and set it.
+	DataSourceSchema schema = 4;
+
+	// DateTime value of previous crawl start time in UTC. This value can be used in first incremental crawl. For subsequent calls checkpoint value should be used.
+	google.protobuf.Timestamp previousCrawlStartTimeInUtc = 5;
+}
+
+// Response from crawl that holds a new data item along with status and checkpoint for incremental crawl
+message IncrementalCrawlStreamBit {
+	// Status of operation and error details in case of error
+	OperationStatus status = 1;
+
+	// Data source entity
+	IncrementalCrawlItem crawlItem = 2;
+
+	// Custom marker info that can be used by connector to resume crawl later in case of failures and crashes.
+	CrawlCheckpoint crawlProgressMarker = 3;
+}
+
+// Represents an entity in the data source. For example a file, a folder or a record in a table, or a link to a website
+// The max size allowed is 4Mb
+message IncrementalCrawlItem {
+
+	// Item type enum
+	enum ItemType {
+
+		// Item with content to ingest. These are the actual data items. Example website content
+		ContentItem = 0;
+
+		// Item that acts as a link to a content item.
+		// This item info will be passed in subsequent crawl to crawl further for that item. 
+		// Example link to website or a folder.
+		LinkItem = 1;
+
+		// Represents a deleted item that needs to be removed from the index
+		DeletedItem = 2;
+	}
+
+	// Item type instance held in 'item' attribute
+	ItemType itemType = 1;
+
+	// Unique ID representing the item in the data source
+	string itemId = 2;
+
+	// Item instance
+	// Should be one of the supported item types
+	// 'itemType' attribute should match the type of item set.
+	oneof item {
+
+		// Item of type 'ContentItem' which holds data to be processed
+		ContentItem contentItem = 10;
+
+		// Item of type 'LinkItem' which will be passed in next crawl for further crawling
+		LinkItem linkItem = 11;
+
+		// Item of type 'DeletedItem' which needs to be removed from the index.
+		DeletedItem deletedItem = 12;
+	}
+}
+
 // Item that holds the content of the datasource entity
 message ContentItem {
 
@@ -92,11 +167,15 @@ message ContentItem {
 }
 
 // Item thats a shortcut or link to another item.
-// These items will be sent again to connector for recrawl.
+// These items will be sent again to connector for re-crawl.
 // For example in a folder content, files will be content items and sub folders will be link items.
 message LinkItem {
-	// Additional custom metadat needed by a connector to recrawl the item.
+	// Additional custom metadata needed by a connector to re-crawl the item.
 	map<string, GenericType> metadata = 1;
+}
+
+// Item that is deleted in data source and needs to be removed from index.
+message DeletedItem {
 }
 
 // Structure to hold access control list
@@ -237,7 +316,7 @@ message Content {
 		Tif = 8;
 
 		// For future-proofing, following MSGraph evolvable enums
-        	// All new enums should be added below this one until major API version change.
+        // All new enums should be added below this one until major API version change.
 		UnknownFutureValue = 9;
 	}
 
@@ -249,7 +328,7 @@ message Content {
 }
 
 // Checkpoint to mark the crawl progress
-// Checkpoint from Last successfule item batch will be used for resuming crawl in case of failures or crash.
+// Checkpoint from Last successful item batch will be used for resuming crawl in case of failures or crash.
 message CrawlCheckpoint {
 
 	// Page number to mark crawl progress

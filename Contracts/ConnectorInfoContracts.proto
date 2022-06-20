@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package Microsoft.Graph.Connectors.Contracts.Grpc;
 

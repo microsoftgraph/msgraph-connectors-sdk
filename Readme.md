@@ -34,9 +34,6 @@ This lightweight app is the platform that takes care of orchestration capabiliti
 	- Sample ConnectionInfo.json
 		- Replace the providerId with connector id.
 		- Change the connection ID for each test app run.
-	- Sample AgentConfig.json
-		- Replace the values of tenantId, clientId and secret with the tenant you are using.
-		- Do not change the mockIngestion flag.
 2. Test out connector code flows using TestApp present in the GCA installation folder (Program files> Graph connector agent > TestApp> GraphConnectorAgentTest.exe)
 	- TestApp is only for local testing.
 	- Only one test case can be run at a time. You will have to exit and relaunch the app for testing another scenario.

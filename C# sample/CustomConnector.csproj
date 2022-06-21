@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Contracts\CommonModels.proto" />
+    <None Remove="Contracts\ConnectionManagementContracts.proto" />
+    <None Remove="Contracts\ConnectorCrawlContract.proto" />
+    <None Remove="Contracts\ConnectorInfoContracts.proto" />
+    <None Remove="Contracts\ConnectorOAuthContracts.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="27.2.1" />
+    <PackageReference Include="Google.Protobuf" Version="3.18.0" />
+    <PackageReference Include="Grpc.Core" Version="2.40.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.40.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog" Version="2.11.0-dev-01377" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Contracts\CommonModels.proto" GrpcServices="Server" />
+    <Protobuf Include="Contracts\ConnectionManagementContracts.proto" GrpcServices="Server" />
+    <Protobuf Include="Contracts\ConnectorCrawlContract.proto" GrpcServices="Server" />
+    <Protobuf Include="Contracts\ConnectorInfoContracts.proto" GrpcServices="Server" />
+    <Protobuf Include="Contracts\ConnectorOAuthContracts.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ConnectorManifest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

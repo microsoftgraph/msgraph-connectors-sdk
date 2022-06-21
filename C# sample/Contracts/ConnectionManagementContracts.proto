@@ -32,6 +32,10 @@ message ValidateAuthenticationRequest {
 message ValidateAuthenticationResponse {
 	// Status of operation and error details in case of error
 	OperationStatus status = 1;
+
+	// Credential information to be sent to the connector during the crawl in case of OAuth flow (Access token, refresh token etc., which is sent by the auth server).
+	// This need not be set for non OAuth flows.
+	OAuth2ClientCredentialsResponse oAuth2ClientCredentialsResponse = 2;
 }
 
 // Request model to validate custom configuration information

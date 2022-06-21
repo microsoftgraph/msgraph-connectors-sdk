@@ -4,24 +4,26 @@
 // </copyright>
 // ---------------------------------------------------------------------------
 
-namespace CustomConnectorTemplate.Connector
-{
-    using System.Threading.Tasks;
-    using Grpc.Core;
-    using Microsoft.Graph.Connectors.Contracts.Grpc;
-    using static Microsoft.Graph.Connectors.Contracts.Grpc.ConnectorInfoService;
+using Grpc.Core;
 
+using Microsoft.Graph.Connectors.Contracts.Grpc;
+
+using System.Threading.Tasks;
+
+using static Microsoft.Graph.Connectors.Contracts.Grpc.ConnectorInfoService;
+
+namespace CustomConnector.Connector
+{
     /// <summary>
     /// Extends and implements connector info APIs
     /// </summary>
     public class ConnectorInfoServiceImpl : ConnectorInfoServiceBase
     {
         /// <summary>
-        /// Primary identifies for the connector. Same ID to be used in Manifest for connector onboarding in Graph connectors platform and Microsoft Admin Center.
+        /// Primary identifies for the connector. Same ID to be used in Manifest for connector on-boarding in Graph connectors platform and Microsoft Admin Center.
         /// Cannot be changed after connections are created. Changing it later would fail the connections created with older ID
-        /// Make sure ID is valid GUID
         /// </summary>
-        public const string ConnectorUniqueId = "guid1";
+        public const string ConnectorUniqueId = "a1c127ed-29ce-47fb-ad4a-8836871922ea";
 
         /// <summary>
         /// Returns basic information about the connector.

@@ -4,12 +4,17 @@
 // </copyright>
 // ---------------------------------------------------------------------------
 
-namespace CustomConnectorTemplate
-{
-    using System.Threading;
-    using CustomConnectorTemplate.Server;
-    using Serilog;
+using CustomConnector.Connector;
+using CustomConnector.Server;
 
+using Serilog;
+
+using System;
+using System.IO;
+using System.Threading;
+
+namespace CustomConnector
+{
     /// <summary>
     /// Main program class
     /// </summary>
@@ -24,6 +29,7 @@ namespace CustomConnectorTemplate
             Log.Information("Starting connector");
             var server = new ConnectorServer();
             server.Start();
+            GenerateManifest();
             WaitForShutdown();
             server.Stop();
         }
@@ -36,6 +42,16 @@ namespace CustomConnectorTemplate
         private static void WaitForShutdown()
         {
             Thread.Sleep(Timeout.Infinite);
+        }
+
+        private static void GenerateManifest()
+        {
+            string manifestFilePath = "ConnectorManifest.json";
+            string connectorGuidPlaceholder = "<ConnectorGuid>";
+            string manifest = File.ReadAllText(manifestFilePath);
+            manifest = manifest.Replace(connectorGuidPlaceholder, ConnectorInfoServiceImpl.ConnectorUniqueId, StringComparison.Ordinal);
+            File.WriteAllText(manifestFilePath, manifest);
+            Log.Information(@$"Generated manifest in output directory: {Directory.GetCurrentDirectory()}\{manifestFilePath}");
         }
 
         /// <summary>

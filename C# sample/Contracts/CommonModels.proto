@@ -25,9 +25,12 @@ message AuthenticationData {
 
         /// Windows AD based authentication that supports username, password and domain info
         Windows = 2;
+
+		// OAuth2 based authentication with client credentials - app id and app secret
+		OAuth2ClientCredentials = 3;
     }
 
-	// Type of authetication information held in the instance
+	// Type of authentication information held in the instance
     AuthenticationType authType = 1;
 
 	// Url to access datasource - path to the resource that needs to be crawled
@@ -40,6 +43,9 @@ message AuthenticationData {
 
 		// Set if windows credentials are used to access datasource
         WindowsCredential windowsCredential = 11;
+
+		// Set if access to data source is using OAuth2 client credentials
+		OAuth2ClientCredentials oAuth2ClientCredentials = 12;
     }
 }
 
@@ -50,6 +56,41 @@ message BasicCredential {
 
     // Secret to use with username for accessing data source
     string secret = 2;
+}
+
+// Represents OAuth2 client credentials model
+message OAuth2ClientCredentials {
+	// App id/client id
+	string appId = 1;
+
+	// App secret/client secret
+	string appSecret = 2;
+
+	// OAuth token specific fields containing access token, refresh token, expiry details etc.
+	OAuth2ClientCredentialsResponse oAuth2ClientCredentialsResponse = 3;
+}
+
+// Represents response model from auth server for OAuth2 token request. 
+// The fields present in this model are the common response fields specified in OAuth2 documentation - https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
+// Additionally idToken can be set when OpenIDConnect is supported by the auth servers - https://www.oauth.com/oauth2-servers/openid-connect/id-tokens/
+message OAuth2ClientCredentialsResponse {
+	// Access token
+	string accessToken = 1;
+
+	// Refresh token
+	string refreshToken = 2;
+
+	// Token type. Typically 'Bearer' for OAuth2
+	string tokenType = 3;
+
+	// Expiry of token in unix timestamp
+	uint64 expiresIn = 4;
+
+	// Scopes supported by the token - optional
+	string scope = 5;
+
+	// ID token if auth server supports OpenIDConnect
+	string idToken = 6;
 }
 
 // Represents windows credentials model
@@ -69,7 +110,7 @@ enum OperationResult {
 	// If operation succeeded without any error
 	Success = 0;
 
-	// Operation is a success, but there is a warning mssage to be processed
+	// Operation is a success, but there is a warning message to be processed
 	PartialSuccess = 1;
 
 	// One or more validations failed
@@ -86,6 +127,9 @@ enum OperationResult {
 
 	// If operation was cancelled by CancellationToken
 	Cancelled = 6;
+
+	// To be used in OAuth flow when token has expired
+	TokenExpired = 7;
 }
 
 // Represents the status of an operation including error and warnings.
@@ -97,11 +141,11 @@ message OperationStatus {
 	string statusMessage = 2;
 
 	// Retry info to be used by framework to retry the same operation for a failed operation
-    // Will be ignored incase of success and partial success operations.
+    // Will be ignored in case of success and partial success operations.
 	RetryDetails retryInfo = 3;
 }
 
-// The struct is used for communicating the retry policy in case of ConnectorTransient exception.
+// The structure is used for communicating the retry policy in case of ConnectorTransient exception.
 message RetryDetails {
 	// Enum for defining the type of retry strategy to use for retries.
 	enum RetryType {
@@ -128,7 +172,7 @@ message RetryDetails {
 
 // Represents schema of properties that represent a data entity in data source
 message DataSourceSchema {
-	// Represents list of properties that define a data entiry in data source
+	// Represents list of properties that define a data entity in data source
     repeated SourcePropertyDefinition PropertyList = 1;
 }
 
@@ -163,18 +207,6 @@ message SourcePropertyDefinition {
 
 		/// Collection of DateTime type
 		DateTimeCollection = 8;
-
-		/// Collection of String type
-		CollectionOfString = 9;
-
-		/// Collection of Int64 type
-		CollectionOfInt64 = 10;
-
-		/// Collection of Double type
-		CollectionOfDouble = 11;
-
-		/// Collection of DateTime type
-		CollectionOfDateTime = 12;
 	}
 
 	enum SearchAnnotations {
@@ -255,10 +287,10 @@ message SourcePropertyDefinition {
 	// Property data type
     SourcePropertyType type = 2;
 
-	// Default search annoations
+	// Default search annotations
 	uint32 defaultSearchAnnotations = 3;
 
-	// Required search annotaions
+	// Required search annotations
     // Certain property like id always set isQueryable true and isRetrieable true.
 	uint32 requiredSearchAnnotations = 4;
 
@@ -271,6 +303,6 @@ message SourcePropertyDefinition {
 	// [Optional]Label of this source property. Used by UX to display the label (human readable name).
 	string label = 7;
 
-	// [Optional]Alias of this source propery.
+	// [Optional]Alias of this source property.
 	repeated string aliases = 8;
 }

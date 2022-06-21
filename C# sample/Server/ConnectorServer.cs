@@ -4,15 +4,19 @@
 // </copyright>
 // ---------------------------------------------------------------------------
 
-namespace CustomConnectorTemplate.Server
-{
-    using System;
-    using System.IO;
-    using CustomConnectorTemplate.Connector;
-    using Grpc.Core;
-    using Microsoft.Graph.Connectors.Contracts.Grpc;
-    using Serilog;
+using CustomConnector.Connector;
 
+using Grpc.Core;
+
+using Microsoft.Graph.Connectors.Contracts.Grpc;
+
+using Serilog;
+
+using System;
+using System.IO;
+
+namespace CustomConnector.Server
+{
     /// <summary>
     /// Class to host the grpc server
     /// </summary>
@@ -59,7 +63,7 @@ namespace CustomConnectorTemplate.Server
                     ServerCredentials sslCredentials = BuildSslCredentials();
                     if (sslCredentials == null)
                     {
-                        Log.Fatal($"Failed to build ssl credentials. Cannot start server.");
+                        Log.Fatal($"Failed to build SSL credentials. Cannot start server.");
                         return;
                     }
 
@@ -73,6 +77,7 @@ namespace CustomConnectorTemplate.Server
                         ConnectorInfoService.BindService(new ConnectorInfoServiceImpl()),
                         ConnectionManagementService.BindService(new ConnectionManagementServiceImpl()),
                         ConnectorCrawlerService.BindService(new ConnectorCrawlerServiceImpl()),
+                        ConnectorOAuthService.BindService(new ConnectorOAuthServiceImpl()),
                     },
                     Ports = { new ServerPort("localhost", Port, creds) },
                 };

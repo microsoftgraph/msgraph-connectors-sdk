@@ -4,16 +4,11 @@ Microsoft Graph connectors SDK helps you build custom connectors for your line o
 > ***Note: Microsoft Graph connectors SDK is available in preview***
 
 ## Graph Connector Agent
-This lightweight app is the platform that takes care of orchestration capabilities and coordinates between Microsoft 365 admin center and customer's connector code. More on the software: [On-Premises Agent | Microsoft Docs](https://docs.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "On-Premises Agent | Microsoft Docs"). The capabilities of the platform are captured below:
-![4e6e95fd-2980-443c-9e6b-5f63b2539360](https://user-images.githubusercontent.com/53271958/154615969-65ebf18e-c48c-450a-b5e8-82a5009034e0.png)
-
-![cb4a492d-2e08-47bb-90f8-0009f7f0fa2d](https://user-images.githubusercontent.com/53271958/154615967-0843d987-60c2-4fc2-b6d0-ada856c09777.png)
-
-![e3c44724-8d2d-47ad-931d-43ae2c65c36a](https://user-images.githubusercontent.com/53271958/154615963-c623ecdb-9501-45c0-9e13-294df273f65e.png)
+This lightweight app is the platform that takes care of orchestration capabilities and coordinates between Microsoft 365 admin center and customer's connector code. More on the software: [On-Premises Agent | Microsoft Docs](https://docs.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "On-Premises Agent | Microsoft Docs").
 
 
 ## Get Started
-1. Install GCP and follow the instructions to register the agent [On-Premises Agent | Microsoft Docs](https://docs.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "On-Premises Agent | Microsoft Docs").
+1. Install GCA and follow the instructions to register the agent [On-Premises Agent | Microsoft Docs](https://docs.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "On-Premises Agent | Microsoft Docs").
 2. Download the protocol buffer files with [gRPC contracts](https://github.com/microsoftgraph/msgraph-connectors-sdk/tree/main/Contracts "gRPC contracts").
 3. Protobuf compiler downloaded and extracted from [here](https://github.com/protocolbuffers/protobuf/releases/download/v3.19.4/protoc-3.19.4-win64.zip "here") (Not needed if using Visual Studio).
 	- Environment path updated with bin folder in extracted root.
@@ -27,15 +22,5 @@ This lightweight app is the platform that takes care of orchestration capabiliti
 	- You may need to open notepad/VS in admin mode to edit the JSON.
 8. Test the connector code via TestApp (See below Testing section).
 9. Create a custom connector connection on Microsoft Admin Center.
-
-## Testing
-1. Fill relevant details in the TestApp config files (AgentConfig.json and ConnectionInfo.json) inside the config folder(Program files> Graph connector agent > TestApp> Config)
-	- You may need to open notepad/VS in admin mode to edit the JSON files.
-	- Sample ConnectionInfo.json
-		- Replace the providerId with connector id.
-		- Change the connection ID for each test app run.
-2. Test out connector code flows using TestApp present in the GCA installation folder (Program files> Graph connector agent > TestApp> GraphConnectorAgentTest.exe)
-	- TestApp is only for local testing.
-	- Only one test case can be run at a time. You will have to exit and relaunch the app for testing another scenario.
 
 

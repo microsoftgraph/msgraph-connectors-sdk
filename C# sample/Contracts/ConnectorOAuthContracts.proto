@@ -26,5 +26,5 @@ message RefreshAccessTokenResponse{
 	OperationStatus status = 1;
 
 	// Refreshed credential data
-	OAuth2ClientCredentialsResponse refreshedCredentialData = 2;
+	OAuth2ClientCredentialResponse refreshedCredentialData = 2;
 }

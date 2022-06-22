@@ -27,7 +27,7 @@ message AuthenticationData {
         Windows = 2;
 
 		// OAuth2 based authentication with client credentials - app id and app secret
-		OAuth2ClientCredentials = 3;
+		OAuth2ClientCredential = 3;
     }
 
 	// Type of authentication information held in the instance
@@ -45,7 +45,7 @@ message AuthenticationData {
         WindowsCredential windowsCredential = 11;
 
 		// Set if access to data source is using OAuth2 client credentials
-		OAuth2ClientCredentials oAuth2ClientCredentials = 12;
+		OAuth2ClientCredential oAuth2ClientCredential = 12;
     }
 }
 
@@ -59,7 +59,7 @@ message BasicCredential {
 }
 
 // Represents OAuth2 client credentials model
-message OAuth2ClientCredentials {
+message OAuth2ClientCredential {
 	// App id/client id
 	string appId = 1;
 
@@ -67,13 +67,13 @@ message OAuth2ClientCredentials {
 	string appSecret = 2;
 
 	// OAuth token specific fields containing access token, refresh token, expiry details etc.
-	OAuth2ClientCredentialsResponse oAuth2ClientCredentialsResponse = 3;
+	OAuth2ClientCredentialResponse oAuth2ClientCredentialResponse = 3;
 }
 
 // Represents response model from auth server for OAuth2 token request. 
 // The fields present in this model are the common response fields specified in OAuth2 documentation - https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
 // Additionally idToken can be set when OpenIDConnect is supported by the auth servers - https://www.oauth.com/oauth2-servers/openid-connect/id-tokens/
-message OAuth2ClientCredentialsResponse {
+message OAuth2ClientCredentialResponse {
 	// Access token
 	string accessToken = 1;
 

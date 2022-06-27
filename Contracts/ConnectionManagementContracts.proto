@@ -9,16 +9,16 @@ package Microsoft.Graph.Connectors.Contracts.Grpc;
 
 // Service for connection management from UI
 service ConnectionManagementService {
-    // Validate if the provided datasource can be successfully accessed using provided credential data
+    	// Validate if the provided datasource can be successfully accessed using provided credential data
 	rpc ValidateAuthentication (ValidateAuthenticationRequest) returns (ValidateAuthenticationResponse);
 
 	// Validate if the custom configuration info provided by Search Admin can be used to crawl data source.
-    // Ensure all items can be accessed and crawled efficiently with provided info
+    	// Ensure all items can be accessed and crawled efficiently with provided info
 	rpc ValidateCustomConfiguration (ValidateCustomConfigurationRequest) returns (ValidateCustomConfigurationResponse);
 
 	// Return schema of items in datasource. Schema is comprised of list of properties.
-    // Each property maps to an attribute of a data source entity. Data source entity can have one or more properties.
-    // Schema represent superset of all the properties any entity in data source can have.
+    	// Each property maps to an attribute of a data source entity. Data source entity can have one or more properties.
+    	// Schema represent superset of all the properties any entity in data source can have.
 	rpc GetDataSourceSchema (GetDataSourceSchemaRequest) returns (GetDataSourceSchemaResponse);
 }
 
@@ -40,7 +40,7 @@ message ValidateAuthenticationResponse {
 
 // Request model to validate custom configuration information
 message ValidateCustomConfigurationRequest {
-    // Configuration data
+    	// Configuration data
 	CustomConfiguration customConfiguration = 1;
 
 	// Holds datasource access URL and credential to access it

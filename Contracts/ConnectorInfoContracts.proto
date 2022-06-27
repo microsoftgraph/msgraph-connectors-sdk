@@ -8,7 +8,7 @@ package Microsoft.Graph.Connectors.Contracts.Grpc;
 // Service for getting information on connector
 service ConnectorInfoService {
 	// Get basic information about connector
-    rpc GetBasicConnectorInfo (GetBasicConnectorInfoRequest) returns (GetBasicConnectorInfoResponse);
+    	rpc GetBasicConnectorInfo (GetBasicConnectorInfoRequest) returns (GetBasicConnectorInfoResponse);
 
 	// Health check the connector to test connectivity
 	rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);

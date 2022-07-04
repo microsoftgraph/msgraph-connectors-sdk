@@ -20,7 +20,7 @@ This lightweight app is the platform that takes care of orchestration capabiliti
 6. Create a server, run the application and generate the executable/output binaries.
 7. Edit the CustomConnectorPortMap JSON file in the GCA installation folder (Program files > Graph connector agent) with connector id (same as provider id) and TCP port information (port on which you are running the server).
 	- You may need to open notepad/VS in admin mode to edit the JSON.
-8. Test the connector code via TestApp (See below Testing section).
+8. Test the connector code via TestApp.
 9. Create a custom connector connection on Microsoft Admin Center.
 
 

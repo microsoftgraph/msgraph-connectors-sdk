@@ -73,8 +73,8 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(Description),
                     Type = SourcePropertyType.String,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsContent),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsContent),
+                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
+                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             return schema;
@@ -95,8 +95,7 @@ namespace CustomConnector.Models
             return new ContentItem
             {
                 AccessList = this.GetAccessControlList(),
-                PropertyValues = this.GetSourcePropertyValueMap(),
-                Content = this.GetContent()
+                PropertyValues = this.GetSourcePropertyValueMap()
             };
         }
 
@@ -165,16 +164,15 @@ namespace CustomConnector.Models
                 {
                     StringCollectionValue = appliancesPropertyValue,
                 });
-            return sourcePropertyValueMap;
-        }
 
-        private Content GetContent()
-        {
-            return new Content()
-            {
-                ContentType = Content.Types.ContentType.Text,
-                ContentValue = this.Description,
-            };
+            sourcePropertyValueMap.Values.Add(
+                nameof(this.Description),
+                new GenericType
+                {
+                    StringValue = Description,
+                });
+                
+            return sourcePropertyValueMap;
         }
 
     }

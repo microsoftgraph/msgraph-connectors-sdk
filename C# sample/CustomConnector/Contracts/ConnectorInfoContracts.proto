@@ -1,0 +1,31 @@
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+syntax = "proto3";
+
+package Microsoft.Graph.Connectors.Contracts.Grpc;
+
+// Service for getting information on connector
+service ConnectorInfoService {
+	// Get basic information about connector
+	rpc GetBasicConnectorInfo (GetBasicConnectorInfoRequest) returns (GetBasicConnectorInfoResponse);
+
+	// Health check the connector to test connectivity
+	rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// Request model to retrieve basic connector information
+message GetBasicConnectorInfoRequest {
+}
+
+// Response model holding basic connector information
+message GetBasicConnectorInfoResponse {
+	// Unique identifier for the connector.
+	string connectorId = 1;
+}
+
+message HealthCheckRequest {
+}
+
+message HealthCheckResponse{
+}

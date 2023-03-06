@@ -1,14 +1,11 @@
 ## About
-Microsoft Graph connectors SDK helps you build custom connectors for your line of business data sources quickly and efficiently in any of [11 available languages](https://grpc.io/docs/languages/ "11 available languages"). You can leverage the capabilities of our robust Graph connector platform for indexing any of your cloud or on-prem data sources. The SDK also gives you the capability to manage your custom as well as Microsoft's connectors included with the admin center, all in one place through the Microsoft 365 admin center. Access our full documentation from [Connectors SDK overview](https://learn.microsoft.com/en-us/graph/custom-connector-sdk-overview).
-
-> ***Note: Microsoft Graph connectors SDK is available in preview***
+Microsoft Graph connectors SDK helps you build custom connectors for your line of business data sources quickly and efficiently in any of [11 available languages](https://grpc.io/docs/languages/ "11 available languages"). You can leverage the capabilities of our robust Graph connector agent for indexing any of your cloud or on-prem data sources. The SDK also gives you the capability to manage your custom as well as Microsoft's connectors included with the admin center, all in one place through the Microsoft 365 admin center. Access our full documentation from [Connectors SDK overview](https://learn.microsoft.com/en-us/graph/custom-connector-sdk-overview).
 
 ## Graph Connector Agent
-This lightweight app is the platform that takes care of orchestration capabilities and coordinates between Microsoft 365 admin center and customer's connector code. More on the software: [On-Premises Agent | Microsoft Docs](https://docs.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "On-Premises Agent | Microsoft Docs").
-
+This lightweight app is the platform that takes care of orchestration capabilities and coordinates between Microsoft 365 admin center and customer's connector code. More on the software: [Graph Connector Agent | Microsoft Docs](https://learn.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "Graph Connector Agent | Microsoft Docs").
 
 ## Get Started
-1. Install GCA and follow the instructions to register the agent [On-Premises Agent | Microsoft Docs](https://docs.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "On-Premises Agent | Microsoft Docs").
+1. Install GCA and follow the instructions to register the agent [Graph Connector Agent | Microsoft Docs](https://learn.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "Graph Connector Agent | Microsoft Docs").
 2. Download the protocol buffer files with [gRPC contracts](https://github.com/microsoftgraph/msgraph-connectors-sdk/tree/main/Contracts "gRPC contracts").
 3. Protobuf compiler downloaded and extracted from [here](https://github.com/protocolbuffers/protobuf/releases/download/v3.19.4/protoc-3.19.4-win64.zip "here") (Not needed if using Visual Studio).
 	- Environment path updated with bin folder in extracted root.

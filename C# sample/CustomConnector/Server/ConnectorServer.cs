@@ -4,18 +4,14 @@
 // </copyright>
 // ---------------------------------------------------------------------------
 
-using CustomConnector.Connector;
-
 using Grpc.Core;
-
 using Microsoft.Graph.Connectors.Contracts.Grpc;
-
+using SampleRESTCustomConnector.Connector;
 using Serilog;
-
 using System;
 using System.IO;
 
-namespace CustomConnector.Server
+namespace SampleRESTCustomConnector.Server
 {
     /// <summary>
     /// Class to host the grpc server
@@ -28,7 +24,7 @@ namespace CustomConnector.Server
         /// Ensure that no other application is blocking the port or select a port number that is ensured to be free on production environment.
         /// Field is made accessible to outside of the class to be able to update it from a config file if needed
         /// </summary>
-        public static int Port { get; set; } = 30303;
+        public static int Port { get; set; } = 30304;
 
         /// <summary>
         /// [Optional]
@@ -46,6 +42,21 @@ namespace CustomConnector.Server
         public const string CertificateKeyFilePath = @"<path to certificate key file>";
 
         private Grpc.Core.Server server = null;
+        private const string MicrosoftFolderInAppData = "Microsoft";
+
+        /// <summary>
+        /// Connector Name
+        /// </summary>
+        private const string ConnectorName = "CustomConnector"; // Replace this with the connector name
+
+        /// <summary>
+        /// API to initialize and start the logger
+        /// </summary>
+        public void StartLogger()
+        {
+            InitializeLogger();
+            Log.Information("Starting Connector Logger");
+        }
 
         /// <summary>
         /// API to initialize and start grpc server
@@ -63,7 +74,7 @@ namespace CustomConnector.Server
                     ServerCredentials sslCredentials = BuildSslCredentials();
                     if (sslCredentials == null)
                     {
-                        Log.Fatal($"Failed to build SSL credentials. Cannot start server.");
+                        Log.Fatal("Failed to build SSL credentials. Cannot start server.");
                         return;
                     }
 
@@ -83,7 +94,7 @@ namespace CustomConnector.Server
                 };
 
                 this.server.Start();
-                Log.Information($"Server started. Listening for calls from Graph connectors platform.");
+                Log.Information("Server started. Listening for calls from Graph connectors platform.");
                 Log.Information($"ConnectorId: {ConnectorInfoServiceImpl.ConnectorUniqueId} running on port: {Port}");
             }
             catch (Exception ex)
@@ -133,6 +144,42 @@ namespace CustomConnector.Server
             }
 
             return credentials;
+        }
+
+        /// <summary>
+        /// Initializes serilog logger.
+        /// Serilog is just an option. Feel free to use any of the logging frameworks.
+        /// </summary>
+        private static void InitializeLogger()
+        {
+            long logFileSizeLimitInBytes = 10 * 1000 * 1000; // 10 MB
+            var logFilePath = Path.Combine(GetLocalAppDataFolder(), @"Logs\ConnectorLog.log"); // By default AppData folder of the current user account is used to store logs. Developer can give an absolute path which user account can access
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File(logFilePath, fileSizeLimitBytes: logFileSizeLimitInBytes, rollOnFileSizeLimit: true)
+                .CreateLogger();
+        }
+
+        /// <summary>
+        /// Returns path for local appdata folder for current assembly
+        /// </summary>
+        /// <returns>Folder path</returns>
+        private static string GetLocalAppDataFolder()
+        {
+            string localAppDataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string appDataFolder = Path.Combine(
+                localAppDataFolderPath,
+                MicrosoftFolderInAppData,
+                ConnectorName);
+
+            if (!Directory.Exists(appDataFolder))
+            {
+                Directory.CreateDirectory(appDataFolder);
+            }
+
+            return appDataFolder;
         }
     }
 }

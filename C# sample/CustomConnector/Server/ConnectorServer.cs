@@ -6,12 +6,12 @@
 
 using Grpc.Core;
 using Microsoft.Graph.Connectors.Contracts.Grpc;
-using SampleRESTCustomConnector.Connector;
+using CustomConnector.Connector;
 using Serilog;
 using System;
 using System.IO;
 
-namespace SampleRESTCustomConnector.Server
+namespace CustomConnector.Server
 {
     /// <summary>
     /// Class to host the grpc server
@@ -24,7 +24,7 @@ namespace SampleRESTCustomConnector.Server
         /// Ensure that no other application is blocking the port or select a port number that is ensured to be free on production environment.
         /// Field is made accessible to outside of the class to be able to update it from a config file if needed
         /// </summary>
-        public static int Port { get; set; } = 30304;
+        public static int Port { get; set; } = 30303;
 
         /// <summary>
         /// [Optional]

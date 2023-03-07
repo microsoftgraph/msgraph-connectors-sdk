@@ -13,6 +13,7 @@ namespace CustomConnectorWorkerService
         public Worker(ILogger<Worker> logger)
         {
             var server = new ConnectorServer();
+            server.StartLogger();
             server.Start();
         }
 

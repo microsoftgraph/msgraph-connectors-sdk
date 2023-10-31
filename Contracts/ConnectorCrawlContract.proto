@@ -238,9 +238,6 @@ message Principal {
 
 		// AAD
 		AzureActiveDirectory = 1;
-
-		// Anything other than AAD
-		External = 2;
 	}
 
 	// Enum to specify identity representation type

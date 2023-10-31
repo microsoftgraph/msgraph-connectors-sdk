@@ -130,6 +130,9 @@ enum OperationResult {
 
 	// To be used in OAuth flow when token has expired
 	TokenExpired = 7;
+
+	// To be used in Crawl flow	when item is to	be skipped
+	SkipItem = 8;
 }
 
 // Represents the status of an operation including error and warnings.

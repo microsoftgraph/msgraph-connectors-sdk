@@ -1,0 +1,396 @@
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "Contracts/CommonModels.proto";
+
+package Microsoft.Graph.Connectors.Contracts.Grpc;
+
+/// Defines APIs to read data from datasource
+service ConnectorCrawlerService {
+
+  /// Returns a new data item stream by crawling the data source for full and periodic full crawl.
+  rpc GetCrawlStream (GetCrawlStreamRequest) returns (stream CrawlStreamBit);
+
+  /// Returns a new data item stream by crawling the data source for incremental crawl.
+  rpc GetIncrementalCrawlStream (GetIncrementalCrawlStreamRequest) returns (stream IncrementalCrawlStreamBit);
+}
+
+// Request object to hold all the parameters needed for crawling the datasource
+message GetCrawlStreamRequest {
+
+	// Connection specific custom configuration info provided by Search Admin
+	CustomConfiguration customConfiguration = 1;
+
+	// Basic access information of data source like url, access credentials etc.
+	AuthenticationData authenticationData = 2;
+
+	// Crawl progress checkpoint that was marked by previous items batch. Used to resume crawls in case of crashes or other failures.
+	CrawlCheckpoint crawlProgressMarker = 3;
+
+	// Schema of connection. This is used to identify the property which is content and set it.
+	DataSourceSchema schema = 4;
+}
+
+// Response from crawl that holds a new data item along with status and checkpoint
+message CrawlStreamBit {
+	// Status of operation and error details in case of error
+	OperationStatus status = 1;
+
+	// Data source entity
+	CrawlItem crawlItem = 2;
+
+	// Custom marker info that can be used by connector to resume crawl later in case of failures and crashes.
+	CrawlCheckpoint crawlProgressMarker = 3;
+}
+
+// Represents an entity in the data source. For example a file, a folder or a record in a table, or a link to a website
+// The max size allowed is 4Mb
+message CrawlItem {
+
+	// Item type enum
+	enum ItemType {
+
+		// Item with content to ingest. These are the actual data items. Example website content
+		ContentItem = 0;
+
+		// Item that acts as a link to a content item.
+		// This item info will be passed in subsequent crawl to crawl further for that item. 
+		// Example link to website or a folder.
+		LinkItem = 1;
+	}
+
+	// Item type instance held in 'item' attribute
+	ItemType itemType = 1;
+
+	// Unique ID representing the item in the data source
+	string itemId = 2;
+
+	// Item instance
+	// Should be one of the supported item types
+	// 'itemType' attribute should match the type of item set.
+	oneof item {
+
+		// Item of type 'ContentItem' which holds data to be processed
+		ContentItem contentItem = 10;
+
+		// Item of type 'LinkItem' which will be passed in next crawl for further crawling
+		LinkItem linkItem = 11;
+	}
+}
+
+// Request object to hold all the parameters needed for crawling the datasource for incremental crawl
+message GetIncrementalCrawlStreamRequest {
+
+	// Connection specific custom configuration info provided by Search Admin
+	CustomConfiguration customConfiguration = 1;
+
+	// Basic access information of data source like url, access credentials etc.
+	AuthenticationData authenticationData = 2;
+
+	// Crawl progress checkpoint that was marked by previous items batch. Used to resume crawls in case of crashes or other failures.
+	CrawlCheckpoint crawlProgressMarker = 3;
+
+	// Schema of connection. This is used to identify the property which is content and set it.
+	DataSourceSchema schema = 4;
+
+	// DateTime value of previous crawl start time in UTC. This value can be used in first incremental crawl. For subsequent calls checkpoint value should be used.
+	google.protobuf.Timestamp previousCrawlStartTimeInUtc = 5;
+}
+
+// Response from crawl that holds a new data item along with status and checkpoint for incremental crawl
+message IncrementalCrawlStreamBit {
+	// Status of operation and error details in case of error
+	OperationStatus status = 1;
+
+	// Data source entity
+	IncrementalCrawlItem crawlItem = 2;
+
+	// Custom marker info that can be used by connector to resume crawl later in case of failures and crashes.
+	CrawlCheckpoint crawlProgressMarker = 3;
+}
+
+// Represents an entity in the data source. For example a file, a folder or a record in a table, or a link to a website
+// The max size allowed is 4Mb
+message IncrementalCrawlItem {
+
+	// Item type enum
+	enum ItemType {
+
+		// Item with content to ingest. These are the actual data items. Example website content
+		ContentItem = 0;
+
+		// Item that acts as a link to a content item.
+		// This item info will be passed in subsequent crawl to crawl further for that item. 
+		// Example link to website or a folder.
+		LinkItem = 1;
+
+		// Represents a deleted item that needs to be removed from the index
+		DeletedItem = 2;
+	}
+
+	// Item type instance held in 'item' attribute
+	ItemType itemType = 1;
+
+	// Unique ID representing the item in the data source
+	string itemId = 2;
+
+	// Item instance
+	// Should be one of the supported item types
+	// 'itemType' attribute should match the type of item set.
+	oneof item {
+
+		// Item of type 'ContentItem' which holds data to be processed
+		ContentItem contentItem = 10;
+
+		// Item of type 'LinkItem' which will be passed in next crawl for further crawling
+		LinkItem linkItem = 11;
+
+		// Item of type 'DeletedItem' which needs to be removed from the index.
+		DeletedItem deletedItem = 12;
+	}
+}
+
+// Item that holds the content of the datasource entity
+message ContentItem {
+
+	// Values of each item property.
+	SourcePropertyValueMap propertyValues = 1;
+
+	// Access control list to restrict access
+	AccessControlList accessList = 2;
+
+	// Content property of the item
+	Content content = 3;
+}
+
+// Item thats a shortcut or link to another item.
+// These items will be sent again to connector for re-crawl.
+// For example in a folder content, files will be content items and sub folders will be link items.
+message LinkItem {
+	// Additional custom metadata needed by a connector to re-crawl the item.
+	map<string, GenericType> metadata = 1;
+}
+
+// Item that is deleted in data source and needs to be removed from index.
+message DeletedItem {
+}
+
+// Structure to hold access control list
+message AccessControlList {
+
+	// List of access control entries
+	repeated AccessControlEntry Entries = 1;
+}
+
+// Structure to hold individual access control entries
+message AccessControlEntry {
+
+	// Access type enum
+	enum AclAccessType {
+
+		// Default - considered as Deny
+		None = 0;
+
+		// Indicates that the entry is about granting the Access
+		Grant = 1;
+
+		// Indicates that the entry is about denying the access. Deny overrides Grant.
+		Deny = 2;
+	}
+
+	// Access of the entity
+	AclAccessType accessType = 1;
+
+	// Represents group or owner to whom the access is defined
+	Principal principal = 2;
+}
+
+// Structure to store access principal attributes
+message Principal {
+
+	// Type of principal object
+	enum PrincipalType {
+
+		// Default - will be assumed to be User
+		PT_None = 0;
+
+		// User
+		User = 1;
+
+		// Group
+		Group = 2;
+
+		// Special group to allow everyone
+		Everyone = 3;
+
+		// Special group to allow everyone except guests
+		EveryoneExceptGuests = 4;
+	}
+
+	// Type of source managing the identities
+	enum IdentitySource {
+
+		// Default - will be assumed AAD
+		IS_None = 0;
+
+		// AAD
+		AzureActiveDirectory = 1;
+	}
+
+	// Enum to specify identity representation type
+	enum IdentityType {
+
+		// Default - Will be assumed to be AadId
+		IT_None = 0;
+
+		// SID provided by Active Directory (AD)
+		ActiveDirectorySId = 1;
+
+		// User principal name (UPN)
+		UserPrincipalName = 2;
+
+		// Azure Active Directory ID
+		AadId = 3;
+	}
+
+	// Type of principal
+	PrincipalType type = 1;
+
+	// Principal value - ID, email, etc.,
+	string value = 2;	
+
+	// Type of Identity source
+	IdentitySource identitySource = 3;
+
+	// Identity representation type
+	IdentityType identityType = 4;
+
+	// Additional metadata about the Identity source
+	map<string, string> identitySourceProperties = 5;
+}
+
+// Stores the property values of an item
+message SourcePropertyValueMap {
+	// Add property values of an item
+	// Key will be property name and value will be property value
+	// For example for a file content - {<title, file.txt>, <modifiedDate, "20020101T14:12:16.00000">, <url, c:\\share>}
+	map<string, GenericType> values = 1;
+}
+
+message Content {
+
+	// Enumerations for type of content value
+	enum ContentType {
+
+		// Default value
+		None = 0;
+
+		// Text content type
+		Text = 1;
+
+		// Html content type
+		Html = 2;
+
+		// Binary content type
+		Binary = 3;
+
+		// Bmp content type
+		Bmp = 4;
+
+		// Jpg content type
+		Jpg = 5;
+
+		// Pdf content type
+		Pdf = 6;
+
+		// Png content type
+		Png = 7;
+
+		// Tif content type
+		Tif = 8;
+
+		// For future-proofing, following MSGraph evolvable enums
+        // All new enums should be added below this one until major API version change.
+		UnknownFutureValue = 9;
+	}
+
+	// Type of content
+	ContentType contentType =1;
+
+	// Value of content
+	string contentValue = 2;
+}
+
+// Checkpoint to mark the crawl progress
+// Checkpoint from Last successful item batch will be used for resuming crawl in case of failures or crash.
+message CrawlCheckpoint {
+
+	// Page number to mark crawl progress
+	uint32 pagenumber = 1;
+
+	// Number of items being returned in every batch.
+	uint32 batchSize = 2;
+
+	// Any other custom data needed to start crawl from the checkpoint.
+	string customMarkerData = 3;
+}
+
+// Represents a generic type that can hold any supported value
+message GenericType {
+	// Value of the Generic type
+	oneof value {
+		// String type value
+		string stringValue = 1;
+
+		// Long value
+		int64 intValue = 2;
+
+		// Double value
+		double doubleValue = 3;
+
+		// DateTime value
+		google.protobuf.Timestamp dateTimeValue = 4;
+
+		// Boolean value
+		bool boolValue = 5;
+
+		// String collection value
+		StringCollectionType stringCollectionValue = 6;
+
+		// Long collection value
+		IntCollectionType intCollectionValue = 7;
+
+		// Double collection value
+		DoubleCollectionType doubleCollectionValue = 8;
+
+		// DateTime collection value
+		TimestampCollectionType dateTimeCollectionValue = 9;
+	}
+}
+
+// Collection of string
+message StringCollectionType {
+	// Value of string collection
+	repeated string values = 1;
+}
+
+// Collection of long
+message IntCollectionType {
+	// Value of long collection
+	repeated int64 values = 1;
+}
+
+// Collection of double
+message DoubleCollectionType {
+	// Value of double collection
+	repeated double values = 1;
+}
+
+// Collection of DateTime
+message TimestampCollectionType {
+	// Value of DateTime collection
+	repeated google.protobuf.Timestamp values = 1;
+}

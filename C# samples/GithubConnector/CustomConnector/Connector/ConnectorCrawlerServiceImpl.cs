@@ -10,7 +10,6 @@ using Microsoft.Graph.Connectors.Contracts.Grpc;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using static Microsoft.Graph.Connectors.Contracts.Grpc.ConnectorCrawlerService;
@@ -215,7 +214,7 @@ namespace CustomConnector.Connector
                     CrawlItem = incCrawlItem,
                     CrawlProgressMarker = new CrawlCheckpoint
                     {
-                        CustomMarkerData = lastModifiedAt.ToString(),
+                        CustomMarkerData = lastModifiedAt.ToUniversalTime().ToString(),
                     },
                 };
             }

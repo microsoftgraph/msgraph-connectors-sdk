@@ -6,11 +6,8 @@ namespace CustomConnector.OAuthHandler
 {
     using IdentityModel.Client;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Graph.Connectors.Contracts.Grpc;
-    using System;
-    using System.Collections.Generic;
+    using Serilog;
     using System.Net.Http;
-    using System.Text;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -38,7 +35,7 @@ namespace CustomConnector.OAuthHandler
             {
                 if (!isRefresh)
                 {
-                    Console.WriteLine("Exchanging token for code");
+                    Log.Information("Exchanging token for code");
                     using (var tokenRequest = new AuthorizationCodeTokenRequest()
                     {
                         Address = OAuthConstants.GithubTokenEndpoint,
@@ -55,7 +52,7 @@ namespace CustomConnector.OAuthHandler
                 else
                 {
                     // Refresh flow
-                    Console.WriteLine("Refreshing token");
+                    Log.Information("Refreshing token");
                     using (var tokenRequest = new RefreshTokenRequest()
                     {
                         Address = OAuthConstants.GithubTokenEndpoint,

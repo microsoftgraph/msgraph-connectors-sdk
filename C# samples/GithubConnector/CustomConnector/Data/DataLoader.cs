@@ -14,9 +14,6 @@ namespace CustomConnector.Data
     using CustomConnector.Models;
     using Newtonsoft.Json;
     using Serilog;
-    using IdentityModel.Client;
-    using System.Threading;
-    using System.Runtime.CompilerServices;
     using Microsoft.Extensions.DependencyInjection;
 
     public class DataLoader
@@ -49,7 +46,6 @@ namespace CustomConnector.Data
                         try
                         {
                             var datasourceUrl = CreateFinalUrl(authenticationData.DatasourceUrl, paginationCheckpoint);
-                            Console.WriteLine("Datasource Url :" + datasourceUrl);
                             var request = new HttpRequestMessage(HttpMethod.Get, new Uri(datasourceUrl));
                             request = AddRequestHeaders(request, authenticationData);
                             var response = await httpClient.SendAsync(request);
@@ -134,7 +130,7 @@ namespace CustomConnector.Data
                     {
                         try
                         {
-                            var datasourceUrl = authenticationData.DatasourceUrl + "?since=" + lastModifiedAt.ToString("yyyy-MM-ddTHH:mm:ss");
+                            var datasourceUrl = authenticationData.DatasourceUrl + "?since=" + lastModifiedAt.ToString("yyyy-MM-ddTHH:mm:ssZ");
                             datasourceUrl = CreateFinalUrl(datasourceUrl, paginationCheckpoint);
                             var request = new HttpRequestMessage(HttpMethod.Get, new Uri(datasourceUrl));
                             request = AddRequestHeaders(request, authenticationData);
@@ -211,18 +207,17 @@ namespace CustomConnector.Data
             string finalUrl = string.Empty;
             if (datasourceUrl.Contains('?'))
             {
-                finalUrl = datasourceUrl + "&page=" + paginationCheckpoint.ToString() + "&per_page=1" + "&direction=asc" + "&sort=updated";
+                finalUrl = datasourceUrl + "&page=" + paginationCheckpoint.ToString() + "&per_page=100" + "&direction=asc" + "&sort=updated";
             }
             else
             {
-                finalUrl = datasourceUrl + "?page=" + paginationCheckpoint.ToString() + "&per_page=1" + "&direction=asc" + "&sort=updated";
+                finalUrl = datasourceUrl + "?page=" + paginationCheckpoint.ToString() + "&per_page=100" + "&direction=asc" + "&sort=updated";
             }
             return finalUrl;
         }
 
         private static HttpRequestMessage AddRequestHeaders(HttpRequestMessage request, AuthenticationData authenticationData)
         {
-            Console.WriteLine(authenticationData.OAuth2ClientCredential.OAuth2ClientCredentialResponse.AccessToken);
             request.Headers.Add("Authorization", "Bearer " + authenticationData.OAuth2ClientCredential.OAuth2ClientCredentialResponse.AccessToken);
             request.Headers.Add("Accept", "application/vnd.github+json");
             request.Headers.Add("User-Agent", "CustomConnectorSampleGithubApp");

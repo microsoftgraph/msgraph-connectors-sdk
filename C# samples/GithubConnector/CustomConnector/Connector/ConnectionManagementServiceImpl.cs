@@ -69,7 +69,6 @@ namespace CustomConnector.Connector
                 var httpContext = await listener.GetContextAsync();
                 var httpRequest = httpContext.Request;
                 string authorizationCode = httpRequest.QueryString.Get("code");
-                Console.WriteLine($"Authorization code: {authorizationCode}");
 
                 // Stop the HTTP server
                 listener.Stop();
@@ -131,7 +130,6 @@ namespace CustomConnector.Connector
                     TokenType = oAuthResponse.TokenType,
                 };
 
-                Console.WriteLine(oAuthResponse.AccessToken);
                 response.OAuth2ClientCredentialResponse = oAuthClientCredentialResponse;
             }
 

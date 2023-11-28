@@ -14,7 +14,7 @@ namespace CustomConnector.OAuthHandler
     public class OAuthTokenResponse
     {
         /// <summary>
-        /// Initiaize an instance of <see cref="OAuthTokenResponse"/>
+        /// Initialize an instance of <see cref="OAuthTokenResponse"/>
         /// </summary>
         /// <param name="tokenResponse">token response</param>
         public OAuthTokenResponse(TokenResponse tokenResponse)

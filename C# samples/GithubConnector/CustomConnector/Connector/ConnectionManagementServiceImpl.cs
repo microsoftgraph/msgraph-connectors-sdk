@@ -125,7 +125,7 @@ namespace CustomConnector.Connector
                 {
                     AccessToken = oAuthResponse.AccessToken,
                     RefreshToken = oAuthResponse.RefreshToken,
-                    ExpiresIn = 300,//(ulong)oAuthResponse.ExpiresIn,
+                    ExpiresIn = (ulong)oAuthResponse.ExpiresIn,
                     Scope = oAuthResponse.Scope,
                     TokenType = oAuthResponse.TokenType,
                 };

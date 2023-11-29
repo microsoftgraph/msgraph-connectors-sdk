@@ -220,7 +220,7 @@ namespace CustomConnector.Data
         {
             request.Headers.Add("Authorization", "Bearer " + authenticationData.OAuth2ClientCredential.OAuth2ClientCredentialResponse.AccessToken);
             request.Headers.Add("Accept", "application/vnd.github+json");
-            request.Headers.Add("User-Agent", "CustomConnectorSampleGithubApp");
+            request.Headers.Add("User-Agent", "CustomConnectorSampleGithubApp"); // [Input Required] Replace with your app name
             return request;
         }
     }

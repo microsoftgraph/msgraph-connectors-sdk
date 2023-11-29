@@ -1,0 +1,22 @@
+{
+  // All these configs are only required to test locally
+  "id": "TestGrpcConnector", // ConnectionId. Must be unique for a tenant. Change this for each crawlTest
+  "name": "TestGrpcConnector", // name of connection
+  "description": "<Connection description>",
+  "configuration": {
+    "providerId": "067B69B9-3B13-42AD-A4DE-3CC229893DCF",
+    "scheduleSetting": {
+      "fullSyncInterval": 180,
+      "incrementalSyncInterval": 60// the value is in sec. Decrease this to run consecutive tests on the same connectionId
+    },
+    "CredentialData": {
+      "Path": "https://api.github.com/repos/<Your Org>/<Your Repo>/issues",
+      "AuthenticationKind": "oauth2.client_credentials",
+      "CredentialDetails": { // Authentication credentials in case of windows or basic auth. This can be null for anonymous auth.
+        "loginId": "<ClientId>",
+        "loginSecret": "<ClientSecret>"
+      }
+    },
+    "ProviderParameters": null
+  }
+}

@@ -29,7 +29,7 @@ This is a sample for crawling and indexing GitHub Issues.
 1. Install GCA and follow the instructions to register the agent [Graph Connector Agent | Microsoft Docs](https://learn.microsoft.com/en-us/MicrosoftSearch/graph-connector-agent "Graph Connector Agent | Microsoft Docs").
 2. Build and run the console application.
 3. Edit the CustomConnectorPortMap JSON file in the GCA installation folder (Program files > Graph connector agent) with connector id (same as connector id present in ConnectorInfoServiceImpl.cs) and TCP port information (Port used by connector can be found in: ConnectorServer.cs). This will be read by GCA while instantiating the connector instance. *You may need to open notepad/VS in admin mode to edit the JSON.*
-4. Search For [Input Required] in the code and fill in the required information.
+4. Search for [Input Required] in the code and fill in the required information.
 5. Fill relevant details in the TestApp config files (ConnectionInfo.json and Manifest.json) inside the config folder(Program files> Graph connector agent > TestApp> Config). Sample files are provided. More on Test Utility: [Test Utility](https://learn.microsoft.com/en-us/graph/custom-connector-sdk-testapp "Test Utility") 
 	- You may need to open notepad/VS in admin mode to edit the JSON files.
 	- Sample ConnectionInfo.json

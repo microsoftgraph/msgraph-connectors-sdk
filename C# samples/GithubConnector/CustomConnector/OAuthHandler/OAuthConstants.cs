@@ -14,7 +14,7 @@ namespace CustomConnector.OAuthHandler
         /// <summary>
         /// redirect url
         /// </summary>
-        public const string RedirectUrl = "http://localhost:30323"; // Must match the registered redirect URI
+        public const string RedirectUrl = "http://localhost:30323"; // [Input Required] Must match the registered redirect URI
 
         /// <summary>
         /// Github auth url

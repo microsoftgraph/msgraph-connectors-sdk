@@ -64,7 +64,7 @@ namespace CustomConnector.Connector
                 RefreshedCredentialData = new OAuth2ClientCredentialResponse
                 {
                     AccessToken = oAuthTokenResponse.AccessToken,
-                    ExpiresIn = 300,//(ulong)oAuthTokenResponse.ExpiresIn,
+                    ExpiresIn = (ulong)oAuthTokenResponse.ExpiresIn,
                     RefreshToken = oAuthTokenResponse.RefreshToken,
                     Scope = oAuthTokenResponse.Scope,
                     TokenType = oAuthTokenResponse.TokenType,

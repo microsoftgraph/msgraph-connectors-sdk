@@ -1,0 +1,12 @@
+{
+  "connectorId": "067B69B9-3B13-42AD-A4DE-3CC229893DCF",
+  "authTypes": [
+    "Windows",
+    "Basic",
+    "Anonymous",
+    "OAuth2ClientCredentials"
+  ],
+  "additionalCrawlsSupported": [
+    "Incremental"
+  ]
+}

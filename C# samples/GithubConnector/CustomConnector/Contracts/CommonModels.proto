@@ -1,0 +1,311 @@
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+syntax = "proto3";
+
+package Microsoft.Graph.Connectors.Contracts.Grpc;
+
+// Connector specific custom configuration info provided by Search Admin during connection creation
+// Structure and format of the configuration is not managed by platform
+// Connector developer can use format of their choice
+message CustomConfiguration {
+	// Holds the configuration info as a string. Connector should have the capability to interpret the content of the string
+	string configuration = 1;
+}
+
+// Holds credential provided by admin to access data source
+message AuthenticationData {
+	// Holds authentication information required to access data source
+	enum AuthenticationType{
+        /// No authentication required
+        Anonymous = 0;
+
+        /// Basic Authentication that supports username and password
+        Basic = 1;
+
+        /// Windows AD based authentication that supports username, password and domain info
+        Windows = 2;
+
+		// OAuth2 based authentication with client credentials - app id and app secret
+		OAuth2ClientCredential = 3;
+    }
+
+	// Type of authentication information held in the instance
+    AuthenticationType authType = 1;
+
+	// Url to access datasource - path to the resource that needs to be crawled
+    string DatasourceUrl = 2;
+
+	// Credentials to access datasource. Unused in case of anonymous AuthenticationType
+    oneof credentialData {
+		// Set if basic credentials are used to access datasource
+        BasicCredential basicCredential = 10;
+
+		// Set if windows credentials are used to access datasource
+        WindowsCredential windowsCredential = 11;
+
+		// Set if access to data source is using OAuth2 client credentials
+		OAuth2ClientCredential oAuth2ClientCredential = 12;
+    }
+}
+
+// Represents basic credentials model
+message BasicCredential {
+    // Username for accessing the data source
+    string username = 1;
+
+    // Secret to use with username for accessing data source
+    string secret = 2;
+}
+
+// Represents OAuth2 client credentials model
+message OAuth2ClientCredential {
+	// App id/client id
+	string appId = 1;
+
+	// App secret/client secret
+	string appSecret = 2;
+
+	// OAuth token specific fields containing access token, refresh token, expiry details etc.
+	OAuth2ClientCredentialResponse oAuth2ClientCredentialResponse = 3;
+}
+
+// Represents response model from auth server for OAuth2 token request. 
+// The fields present in this model are the common response fields specified in OAuth2 documentation - https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
+// Additionally idToken can be set when OpenIDConnect is supported by the auth servers - https://www.oauth.com/oauth2-servers/openid-connect/id-tokens/
+message OAuth2ClientCredentialResponse {
+	// Access token
+	string accessToken = 1;
+
+	// Refresh token
+	string refreshToken = 2;
+
+	// Token type. Typically 'Bearer' for OAuth2
+	string tokenType = 3;
+
+	// Expiry of token in unix timestamp
+	uint64 expiresIn = 4;
+
+	// Scopes supported by the token - optional
+	string scope = 5;
+
+	// ID token if auth server supports OpenIDConnect
+	string idToken = 6;
+}
+
+// Represents windows credentials model
+message WindowsCredential {
+    // Username for accessing the data source
+    string username = 1;
+
+    // Secret to use with username for accessing data source
+    string secret = 2;
+
+    // AD Domain that the account belongs to
+    string domain = 3;
+}
+
+// Classification of result types
+enum OperationResult {
+	// If operation succeeded without any error
+	Success = 0;
+
+	// Operation is a success, but there is a warning message to be processed
+	PartialSuccess = 1;
+
+	// One or more validations failed
+	ValidationFailure = 2;
+
+	// Credential provided did not work
+	AuthenticationIssue = 3;
+
+	// Datasource read error
+	DatasourceError = 4;
+
+	// Network operation error
+	NetworkError = 5;
+
+	// If operation was cancelled by CancellationToken
+	Cancelled = 6;
+
+	// To be used in OAuth flow when token has expired
+	TokenExpired = 7;
+
+	// To be used in Crawl flow	when item is to	be skipped
+	SkipItem = 8;
+}
+
+// Represents the status of an operation including error and warnings.
+message OperationStatus {
+	// Operational result
+	OperationResult result = 1;
+
+	// Custom message for logging and monitoring
+	string statusMessage = 2;
+
+	// Retry info to be used by framework to retry the same operation for a failed operation
+    // Will be ignored in case of success and partial success operations.
+	RetryDetails retryInfo = 3;
+}
+
+// The structure is used for communicating the retry policy in case of ConnectorTransient exception.
+message RetryDetails {
+	// Enum for defining the type of retry strategy to use for retries.
+	enum RetryType {
+		NoRetry = 0;
+		Standard = 1;
+		ExponentialBackOff = 2;
+	}
+
+	// Retry type defines the type of retry strategy required for the error.
+	RetryType type = 1;
+
+	// Number of retries to be done for the exception.
+	uint32 numberOfRetries = 2;
+
+	// Gets pause between retries in case of standard retries.
+	uint64 pauseBetweenRetriesInMilliseconds = 3;
+
+	// Gets coefficient used in the calculation of Exponential Backoff.
+	float backoffCoefficient = 4;
+
+	// Gets backoff Rate used in the calculation of Exponential Backoff.
+	float backoffRate = 5;
+}
+
+// Represents schema of properties that represent a data entity in data source
+message DataSourceSchema {
+	// Represents list of properties that define a data entity in data source
+    repeated SourcePropertyDefinition PropertyList = 1;
+}
+
+// Defines a single source property
+message SourcePropertyDefinition {
+
+	// Represents the different types of properties supported by Type schema
+	enum SourcePropertyType {
+		/// String type.
+		String = 0;
+
+		/// Integer 64 bits
+		Int64 = 1;
+
+		/// Double type
+		Double = 2;
+
+		/// DateTime type
+		DateTime = 3;
+
+		/// Boolean type
+		Boolean = 4;
+
+		/// Collection of String type
+		StringCollection = 5;
+
+		/// Collection of Int64 type
+		Int64Collection = 6;
+
+		/// Collection of Double type
+		DoubleCollection = 7;
+
+		/// Collection of DateTime type
+		DateTimeCollection = 8;
+	}
+
+	enum SearchAnnotations {
+		// none
+		None = 0;
+
+		// If property is "Author", searching "Smith" return items whose Author contains "Smith".
+		IsSearchable = 1;
+
+		// If property is "Author", searching must be "Author: Smith"
+		IsQueryable = 2;
+
+		// If property is retrievable, it will show up in search result
+		IsRetrievable = 4;
+
+		// If property is content, it will be able for caption, language detection, etc
+		IsContent = 8;
+
+		// If property is refinable, search results can be refined.
+		IsRefinable = 16;
+	}
+
+	// Types of semantic label
+	enum SearchPropertyLabel {
+		// Title
+		Title = 0;
+		
+		// Url
+		Url = 1;
+		
+		// Created by
+		CreatedBy = 2;
+		
+		// Last modified by
+		LastModifiedBy = 3;
+		
+		// Authors
+		Authors = 4;
+
+		// Created dateTime
+		CreatedDateTime = 5;
+
+		// Last modified dateTime
+		LastModifiedDateTime = 6;
+
+		// File name
+		FileName = 7;
+		
+		// File extension
+		FileExtension = 8;
+
+		// UPN of last modified by entity
+		LastModifiedByUpn = 9;
+
+		// UPN of created by entity
+		CreatedByUpn = 10;
+
+		// UPN of authors
+		AuthorsUpn = 11;
+
+		// For future-proofing, following MSGraph evolvable enums
+		// All new enums should be added below this one until major API version change.
+		UnknownFutureValue = 12;
+
+		// Container name
+		ContainerName = 13;
+
+		// Container Url
+		ContainerUrl = 14;
+
+		// Icon Url
+		IconUrl = 15;
+	}
+
+	// Property name
+    string name = 1;
+
+	// Property data type
+    SourcePropertyType type = 2;
+
+	// Default search annotations
+	uint32 defaultSearchAnnotations = 3;
+
+	// Required search annotations
+    // Certain property like id always set isQueryable true and isRetrieable true.
+	uint32 requiredSearchAnnotations = 4;
+
+	// Default semantic labels for the source property
+	repeated SearchPropertyLabel defaultSemanticLabels = 5;
+
+	// [Optional]Order of this source property. Used for UX for sorting.
+	int32 order = 6;
+
+	// [Optional]Label of this source property. Used by UX to display the label (human readable name).
+	string label = 7;
+
+	// [Optional]Alias of this source property.
+	repeated string aliases = 8;
+}

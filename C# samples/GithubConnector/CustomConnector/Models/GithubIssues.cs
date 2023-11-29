@@ -68,8 +68,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(Id),
                     Type = SourcePropertyType.Int64,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsQueryable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsQueryable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
@@ -77,8 +75,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(Url),
                     Type = SourcePropertyType.String,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
@@ -86,8 +82,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(NodeId),
                     Type = SourcePropertyType.String,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
@@ -95,8 +89,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(Title),
                     Type = SourcePropertyType.String,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
@@ -104,17 +96,13 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(State),
                     Type = SourcePropertyType.String,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
                 new SourcePropertyDefinition
                 {
                     Name = nameof(Locked),
-                    Type = SourcePropertyType.String,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
+                    Type = SourcePropertyType.Boolean,
                 });
 
             schema.PropertyList.Add(
@@ -122,8 +110,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(Body),
                     Type = SourcePropertyType.String,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
@@ -131,8 +117,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(Comments),
                     Type = SourcePropertyType.Int64,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsQueryable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsQueryable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
@@ -140,8 +124,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(Labels),
                     Type = SourcePropertyType.StringCollection,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
@@ -149,8 +131,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(CreatedAt),
                     Type = SourcePropertyType.DateTime,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
@@ -158,8 +138,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(UpdatedAt),
                     Type = SourcePropertyType.DateTime,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             schema.PropertyList.Add(
@@ -167,8 +145,6 @@ namespace CustomConnector.Models
                 {
                     Name = nameof(ClosedAt),
                     Type = SourcePropertyType.DateTime,
-                    DefaultSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
-                    RequiredSearchAnnotations = (uint)(SearchAnnotations.IsSearchable | SearchAnnotations.IsRetrievable),
                 });
 
             return schema;

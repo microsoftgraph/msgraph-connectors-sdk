@@ -7,16 +7,19 @@
 namespace CustomConnector.Models
 {
     using Newtonsoft.Json;
+    using System.Collections.Generic;
+    using System.ComponentModel;
 
-    public class AdditionalParams
+    public class ProviderParams
     {
-        [JsonProperty("Parameters", Required = Required.Always)]
-        public Parameters Parameters { get; set; }
+        [DefaultValue(null)]
+        [JsonProperty("AdditionalParameters", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public AdditionalParameters AdditionalParameters { get; set; }
     }
 
-    public class Parameters
+    public class AdditionalParameters
     {
-        [JsonProperty("ConnectionId", Required = Required.Always)]
-        public string ConnectionId { get; set; }
+        [JsonProperty("QueryParameters", Required = Required.Always)]
+        public Dictionary<string, object> QueryParameters { get; set; }
     }
 }

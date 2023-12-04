@@ -30,7 +30,7 @@ namespace CustomConnector.Data
             this.httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
         }
 
-        public async Task<(List<CrawlItem>, bool)> GetCrawlItems(AuthenticationData authenticationData, int paginationCheckpoint)
+        public async Task<(List<CrawlItem>, bool)> GetCrawlItems(AuthenticationData authenticationData, Dictionary<string, object> additionalQueryParams, int paginationCheckpoint)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace CustomConnector.Data
                     {
                         try
                         {
-                            var datasourceUrl = CreateFinalUrl(authenticationData.DatasourceUrl, paginationCheckpoint);
+                            var datasourceUrl = CreateFinalUrl(authenticationData.DatasourceUrl, additionalQueryParams, paginationCheckpoint);
                             var request = new HttpRequestMessage(HttpMethod.Get, new Uri(datasourceUrl));
                             request = AddRequestHeaders(request, authenticationData);
                             var response = await httpClient.SendAsync(request);
@@ -115,7 +115,7 @@ namespace CustomConnector.Data
             }
         }
 
-        public async Task<(List<IncrementalCrawlItem>, bool, DateTime)> GetIncrementalCrawlItems(AuthenticationData authenticationData, int paginationCheckpoint, DateTime lastModifiedAt)
+        public async Task<(List<IncrementalCrawlItem>, bool, DateTime)> GetIncrementalCrawlItems(AuthenticationData authenticationData, Dictionary<string, object> additionalQueryParams, int paginationCheckpoint, DateTime lastModifiedAt)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace CustomConnector.Data
                         try
                         {
                             var datasourceUrl = authenticationData.DatasourceUrl + "?since=" + lastModifiedAt.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                            datasourceUrl = CreateFinalUrl(datasourceUrl, paginationCheckpoint);
+                            datasourceUrl = CreateFinalUrl(datasourceUrl, additionalQueryParams, paginationCheckpoint);
                             var request = new HttpRequestMessage(HttpMethod.Get, new Uri(datasourceUrl));
                             request = AddRequestHeaders(request, authenticationData);
                             var response = await httpClient.SendAsync(request);
@@ -202,9 +202,10 @@ namespace CustomConnector.Data
             }
         }
 
-        private static string CreateFinalUrl(string datasourceUrl, int paginationCheckpoint)
+        private static string CreateFinalUrl(string datasourceUrl, Dictionary<string, object> additionalQueryParams, int paginationCheckpoint)
         {
             string finalUrl = string.Empty;
+
             if (datasourceUrl.Contains('?'))
             {
                 finalUrl = datasourceUrl + "&page=" + paginationCheckpoint.ToString() + "&per_page=100" + "&direction=asc" + "&sort=updated";
@@ -213,6 +214,18 @@ namespace CustomConnector.Data
             {
                 finalUrl = datasourceUrl + "?page=" + paginationCheckpoint.ToString() + "&per_page=100" + "&direction=asc" + "&sort=updated";
             }
+
+            if (additionalQueryParams != null)
+            {
+                foreach (var query in additionalQueryParams)
+                {
+                    if (finalUrl.Contains('?'))
+                        finalUrl = finalUrl + "&" + query.Key + "=" + query.Value;
+                    else
+                        finalUrl = finalUrl + "?" + query.Key + "=" + query.Value;
+                }
+            }
+
             return finalUrl;
         }
 

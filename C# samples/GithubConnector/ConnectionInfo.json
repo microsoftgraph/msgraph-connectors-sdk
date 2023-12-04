@@ -17,6 +17,6 @@
         "loginSecret": "<ClientSecret>"
       }
     },
-    "ProviderParameters": "{\"Parameters\":{\"ConnectionId\":\"GithubIssuesConnector\"}}"
+    "ProviderParameters": "{\"AdditionalParameters\":{\"QueryParameters\":{\"state\":\"open\"}}}"
   }
 }

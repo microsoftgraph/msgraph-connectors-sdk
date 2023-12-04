@@ -6,6 +6,7 @@ This is a sample for crawling and indexing GitHub Issues.
 2. Implementing OAuth mechanism for authentication
 3. Implementing the refresh mechanism for OAuth.
 4. Implementing Incremental crawl
+5. Adding Additional Parameters
 
 #### Prerequisites:
 1. Admin Access to a Github Organization with a Repository with issues.

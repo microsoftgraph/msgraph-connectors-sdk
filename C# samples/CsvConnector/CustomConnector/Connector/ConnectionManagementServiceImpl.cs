@@ -33,9 +33,30 @@ namespace CustomConnector.Connector
         /// <returns>Response with validation result</returns>
         public override Task<ValidateAuthenticationResponse> ValidateAuthentication(ValidateAuthenticationRequest request, ServerCallContext context)
         {
+            if (request.AuthenticationData.AuthType == AuthenticationData.Types.AuthenticationType.Basic)
+            {
+                Log.Information("Validating basic authentication");
+                
+                // make a datasource API call to validate the credentials. If the call fails, return false with appropriate error message
+                // For example, if the datasource is a SQL database, try to connect to the database using the credentials provided
+                // If the datasource is a REST API, try to make a call to the API using the credentials provided
+                // Sample Code:
+                // var response = await CsvDataLoader.ValidateBasicAuth(request.AuthenticationData.DatasourceUrl, request.AuthenticationData.BasicCredential.UserName, request.AuthenticationData.BasicCredential.Secret);
+                // if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                // {
+                //     return this.BuildAuthValidationResponse(true);
+                // }
+                // else
+                // {
+                //     return this.BuildAuthValidationResponse(false, "Could not validate the provided credentials");
+                // }
+
+                return this.BuildAuthValidationResponse(false, "Basic Authentication is not supported");
+            }
+
             try
             {
-                Log.Information("Validating authentication");
+                Log.Information("Validating anonymous authentication");
                 CsvDataLoader.ReadRecordFromCsv(request.AuthenticationData.DatasourceUrl);
                 return this.BuildAuthValidationResponse(true);
             }

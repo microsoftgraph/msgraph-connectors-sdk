@@ -89,18 +89,34 @@ namespace CustomConnector.Connector
 
         private CrawlStreamBit GetCrawlStreamBit(CrawlItem crawlItem)
         {
-            return new CrawlStreamBit
+            if (crawlItem.ContentItem.AccessList?.Entries?.Count > 0)
             {
-                Status = new OperationStatus
+                return new CrawlStreamBit
                 {
-                    Result = OperationResult.Success,
-                },
-                CrawlItem = crawlItem,
-                CrawlProgressMarker = new CrawlCheckpoint
+                    Status = new OperationStatus
+                    {
+                        Result = OperationResult.Success,
+                    },
+                    CrawlItem = crawlItem,
+                    CrawlProgressMarker = new CrawlCheckpoint
+                    {
+                        CustomMarkerData = crawlItem.ItemId,
+                    },
+                };
+            }
+            else
+            {
+                // Skipping item with null or empty acl.
+                // This is just a sample code. Please change this as per your needs.
+                return new CrawlStreamBit
                 {
-                    CustomMarkerData = crawlItem.ItemId,
-                },
-            };
+                    Status = new OperationStatus
+                    {
+                        Result = OperationResult.SkipItem,
+                        StatusMessage = "Skipping item with null or empty acl",
+                    },
+                };
+            }
         }
 
     }

@@ -49,15 +49,17 @@ namespace CustomConnector.Connector
                 // This is a sample to read additional parameters from the custom configuration.
                 // For example:
                 //{
-                //    "AdditionalParameters" : {
-                //        "QueryParameters" : {
-                //            "state" : "open"
-                //        }
+                //    "QueryParameters" : {
+                //        "state" : "open"
                 //    }
                 //}
                 // This is the json that is passed in the custom configuration field while creating the connection.
-                var additionalParams = JsonSerializer.Deserialize<ProviderParams>(request.CustomConfiguration.Configuration);
-                var additionalQueryParams = additionalParams.AdditionalParameters.QueryParameters;
+                var additionalQueryParams = new Dictionary<string, object>();
+                if (!string.IsNullOrEmpty(request.CustomConfiguration.Configuration))
+                {
+                    var additionalParams = JsonSerializer.Deserialize<ProviderParams>(request.CustomConfiguration.Configuration);
+                    additionalQueryParams = additionalParams.AdditionalParameters.QueryParameters;
+                }
                 // This is just a sample and can be modified as per the needs of the connector.
                 //------------------------------------------------------------------------------------------------------------//
 
@@ -144,8 +146,12 @@ namespace CustomConnector.Connector
                 //    }
                 //}
                 // This is the json that is passed in the custom configuration field while creating the connection.
-                var additionalParams = JsonSerializer.Deserialize<ProviderParams>(request.CustomConfiguration.Configuration);
-                var additionalQueryParams = additionalParams.AdditionalParameters.QueryParameters;
+                var additionalQueryParams = new Dictionary<string, object>();
+                if (!string.IsNullOrEmpty(request.CustomConfiguration.Configuration))
+                {
+                    var additionalParams = JsonSerializer.Deserialize<ProviderParams>(request.CustomConfiguration.Configuration);
+                    additionalQueryParams = additionalParams.AdditionalParameters.QueryParameters;
+                }
                 // This is just a sample and can be modified as per the needs of the connector.
                 //------------------------------------------------------------------------------------------------------------//
 

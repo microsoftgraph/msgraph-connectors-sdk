@@ -5,12 +5,14 @@
 // ---------------------------------------------------------------------------
 
 using CustomConnector.Data;
+using CustomConnector.Models;
 using Grpc.Core;
 using Microsoft.Graph.Connectors.Contracts.Grpc;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static Microsoft.Graph.Connectors.Contracts.Grpc.ConnectorCrawlerService;
 
@@ -35,6 +37,7 @@ namespace CustomConnector.Connector
         {
             try
             {
+
                 Log.Information("GetCrawlStream Entry");
                 int paginationCheckpoint = 1;
                 if (Int32.TryParse(request.CrawlProgressMarker.CustomMarkerData, out int result))
@@ -42,12 +45,30 @@ namespace CustomConnector.Connector
                     paginationCheckpoint = result;
                 }
 
+                //-------------------------------------------------------------------------------------------------------------//
+                // This is a sample to read additional parameters from the custom configuration.
+                // For example:
+                //{
+                //    "QueryParameters" : {
+                //        "state" : "open"
+                //    }
+                //}
+                // This is the json that is passed in the custom configuration field while creating the connection.
+                var additionalQueryParams = new Dictionary<string, object>();
+                if (!string.IsNullOrEmpty(request.CustomConfiguration.Configuration))
+                {
+                    var additionalParams = JsonSerializer.Deserialize<ProviderParams>(request.CustomConfiguration.Configuration);
+                    additionalQueryParams = additionalParams.AdditionalParameters.QueryParameters;
+                }
+                // This is just a sample and can be modified as per the needs of the connector.
+                //------------------------------------------------------------------------------------------------------------//
+
                 var crawlItems = new List<CrawlItem>();
                 bool itemsRemaining = true;
                 while (itemsRemaining)
                 {
                     var dataLoader = new DataLoader();
-                    (crawlItems, itemsRemaining) = await dataLoader.GetCrawlItems(request.AuthenticationData, paginationCheckpoint);
+                    (crawlItems, itemsRemaining) = await dataLoader.GetCrawlItems(request.AuthenticationData, additionalQueryParams, paginationCheckpoint);
                     IEnumerator<CrawlItem> crawlitemEnumerator = crawlItems.GetEnumerator();
                     while (crawlitemEnumerator.MoveNext())
                     {
@@ -116,12 +137,30 @@ namespace CustomConnector.Connector
                     lastModifiedAt = result;
                 }
 
+                //-------------------------------------------------------------------------------------------------------------//
+                // This is a sample to read additional parameters from the custom configuration.
+                // For example:
+                //{
+                //    "QueryParameters" : {
+                //        "state" : "open"
+                //    }
+                //}
+                // This is the json that is passed in the custom configuration field while creating the connection.
+                var additionalQueryParams = new Dictionary<string, object>();
+                if (!string.IsNullOrEmpty(request.CustomConfiguration.Configuration))
+                {
+                    var additionalParams = JsonSerializer.Deserialize<ProviderParams>(request.CustomConfiguration.Configuration);
+                    additionalQueryParams = additionalParams.AdditionalParameters.QueryParameters;
+                }
+                // This is just a sample and can be modified as per the needs of the connector.
+                //------------------------------------------------------------------------------------------------------------//
+
                 var incCrawlItems = new List<IncrementalCrawlItem>();
                 bool itemsRemaining = true;
                 while (itemsRemaining)
                 {
                     var dataLoader = new DataLoader();
-                    (incCrawlItems, itemsRemaining, lastModifiedAt) = await dataLoader.GetIncrementalCrawlItems(request.AuthenticationData, paginationCheckpoint, lastModifiedAt);
+                    (incCrawlItems, itemsRemaining, lastModifiedAt) = await dataLoader.GetIncrementalCrawlItems(request.AuthenticationData, additionalQueryParams, paginationCheckpoint, lastModifiedAt);
                     IEnumerator<IncrementalCrawlItem> incCrawlitemEnumerator = incCrawlItems.GetEnumerator();
                     while (incCrawlitemEnumerator.MoveNext())
                     {

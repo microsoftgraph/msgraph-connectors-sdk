@@ -7,7 +7,7 @@
     "providerId": "067B69B9-3B13-42AD-A4DE-3CC229893DCF",
     "scheduleSetting": {
       "fullSyncInterval": 180,
-      "incrementalSyncInterval": 60// the value is in sec. Decrease this to run consecutive tests on the same connectionId
+      "incrementalSyncInterval": 60 // the value is in sec. Decrease this to run consecutive tests on the same connectionId
     },
     "CredentialData": {
       "Path": "https://api.github.com/repos/<Your Org>/<Your Repo>/issues",
@@ -17,6 +17,6 @@
         "loginSecret": "<ClientSecret>"
       }
     },
-    "ProviderParameters": null
+    "ProviderParameters": "{\"AdditionalParameters\":{\"QueryParameters\":{\"state\":\"open\"}}}"
   }
 }

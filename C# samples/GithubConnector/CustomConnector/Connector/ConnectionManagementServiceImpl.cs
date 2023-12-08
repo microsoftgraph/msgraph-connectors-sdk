@@ -13,6 +13,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static Microsoft.Graph.Connectors.Contracts.Grpc.ConnectionManagementService;
 
@@ -151,19 +152,13 @@ namespace CustomConnector.Connector
             Log.Information("Validating custom configuration");
             ValidateCustomConfigurationResponse response;
 
-            if (!string.IsNullOrWhiteSpace(request.CustomConfiguration.Configuration))
+            try
             {
-                response = new ValidateCustomConfigurationResponse()
+                if (!string.IsNullOrEmpty(request.CustomConfiguration.Configuration))
                 {
-                    Status = new OperationStatus()
-                    {
-                        Result = OperationResult.ValidationFailure,
-                        StatusMessage = "No additional parameters are required for this connector"
-                    },
-                };
-            }
-            else
-            {
+                    var additionalParams = JsonSerializer.Deserialize<ProviderParams>(request.CustomConfiguration.Configuration);
+                }
+
                 response = new ValidateCustomConfigurationResponse()
                 {
                     Status = new OperationStatus()
@@ -171,6 +166,19 @@ namespace CustomConnector.Connector
                         Result = OperationResult.Success,
                     },
                 };
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error while validating custom configuration");
+                response = new ValidateCustomConfigurationResponse()
+                {
+                    Status = new OperationStatus()
+                    {
+                        Result = OperationResult.ValidationFailure,
+                        StatusMessage = ex.Message
+                    },
+                };
+                return Task.FromResult(response);
             }
 
             return Task.FromResult(response);

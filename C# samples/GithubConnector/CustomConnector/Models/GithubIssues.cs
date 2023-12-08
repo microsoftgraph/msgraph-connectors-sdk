@@ -193,7 +193,8 @@ namespace CustomConnector.Models
             return new ContentItem
             {
                 AccessList = this.GetAccessControlList(),
-                PropertyValues = this.GetSourcePropertyValueMap()
+                PropertyValues = this.GetSourcePropertyValueMap(),
+                Content = this.GetContent()
             };
         }
 
@@ -216,6 +217,15 @@ namespace CustomConnector.Models
                     IdentityType = Principal.Types.IdentityType.AadId,
                     Value = "EVERYONE",
                 }
+            };
+        }
+
+        private Content GetContent() 
+        {
+            return new Content
+            {
+                ContentType = Content.Types.ContentType.Text,
+                ContentValue = this.Body,
             };
         }
 

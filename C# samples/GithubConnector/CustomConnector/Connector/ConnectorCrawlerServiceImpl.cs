@@ -49,8 +49,10 @@ namespace CustomConnector.Connector
                 // This is a sample to read additional parameters from the custom configuration.
                 // For example:
                 //{
-                //    "QueryParameters" : {
-                //        "state" : "open"
+                //    "AdditionalParameters" : {
+                //        "QueryParameters" : {
+                //            "state" : "open"
+                //        }
                 //    }
                 //}
                 // This is the json that is passed in the custom configuration field while creating the connection.
@@ -141,8 +143,10 @@ namespace CustomConnector.Connector
                 // This is a sample to read additional parameters from the custom configuration.
                 // For example:
                 //{
-                //    "QueryParameters" : {
-                //        "state" : "open"
+                //    "AdditionalParameters" : {
+                //        "QueryParameters" : {
+                //            "state" : "open"
+                //        }
                 //    }
                 //}
                 // This is the json that is passed in the custom configuration field while creating the connection.

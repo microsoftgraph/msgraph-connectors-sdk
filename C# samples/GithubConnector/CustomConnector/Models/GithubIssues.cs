@@ -193,7 +193,17 @@ namespace CustomConnector.Models
             return new ContentItem
             {
                 AccessList = this.GetAccessControlList(),
-                PropertyValues = this.GetSourcePropertyValueMap()
+                PropertyValues = this.GetSourcePropertyValueMap(),
+                Content = this.GetContent()
+            };
+        }
+
+        private Content GetContent()
+        {
+            return new Content
+            {
+                ContentType = Content.Types.ContentType.Text,
+                ContentValue = this.Body,
             };
         }
 
